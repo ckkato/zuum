@@ -185,21 +185,21 @@ router.get('/:id', function(req, res) {
 
    async.waterfall([
    function(cb) {
-      req.cnn.chkQry('select email, firstName, lastName, id, ' +
-       'role, termsAccepted, whenRegistered from Person where id = ?',
+      req.cnn.chkQry('select role from User where id = ?',
        [req.params.id], cb);
+   },
+
+   function(role, fields, cb) {
+      if (role[0].role === 1)
+         req.cnn.chkQry('select * from User where id = ?', [req.params.id], cb);
+      else
+         req.cnn.chkQry('select id, email, firstName, lastName, phoneNumber, '
+          + 'role from User where id = ?', [req.params.id], cb);
    },
 
    function(prsArr, fields, cb) {
       if (vld.check(prsArr.length, Tags.notFound, null, cb) &&
        vld.checkPrsOK(req.params.id, cb)) {
-      	 for (var i = 0; i < prsArr.length; i++) {
-      	    if (prsArr[i].termsAccepted)
-      	 	     prsArr[i].termsAccepted = prsArr[i].termsAccepted.getTime();
-            if (prsArr[i].whenRegistered)
-      	 	     prsArr[i].whenRegistered = prsArr[i].whenRegistered.getTime();
-      	 }
-
         res.json(prsArr);
         cb();
       }
@@ -214,7 +214,7 @@ router.get('/:id', function(req, res) {
    var vld = req.validator;
 
    if (vld.checkPrsOK(req.params.id)) {
-      req.cnn.query('select * from Person where id = ?', [req.params.id],
+      req.cnn.query('select * from User where id = ?', [req.params.id],
        function(err, prsArr) {
           if (vld.check(prsArr.length, Tags.notFound))
              res.json(prsArr);
