@@ -1,6 +1,6 @@
-drop database if exists ckkato;
-create database ckkato;
-use ckkato;
+drop database if exists zuum;
+create database zuum;
+use zuum;
 
 
 create table User (
@@ -40,8 +40,6 @@ create table Request (
    sndId int not null,
    rcvId int not null,
    rideId int not null,
-   whenMade datetime not null,
-   content varchar(5000) not null,
    constraint FKRequest_sndId foreign key (sndId) references User(id)
     on delete cascade,
    constraint FKRequest_rcvId foreign key (rcvId) references User(id)

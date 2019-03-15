@@ -175,104 +175,70 @@ router.delete('/:rdId', function(req, res) {
    });
 });
 
-router.get('/:cnvId/Msgs', function(req, res) {
+router.get('/:rdId/Rqts', function(req, res) {
    var vld = req.validator;
-   var cnvId = req.params.cnvId;
+   var rdId = req.params.rdId;
    var cnn = req.cnn;
-   var query = 'select m.id, whenMade, email, content from Conversation c' +
-    ' join Message m on cnvId = c.id join Person p on prsId = p.id' +
-    ' where c.id = ? order by m.id asc';
-   var params = [cnvId];
-   var num = req.query.num;
-   var date = req.query.dateTime;
 
    // And finally add a limit clause and parameter if indicated.
 
    async.waterfall([
-   function(cb) {  // Check for existence of conversation
-      cnn.chkQry('select * from Conversation where id = ?', [cnvId], cb);
+   function(cb) {
+      if (vld.check(req.session.id, Tags.noLogin, null, cb))
+         cnn.chkQry('select driverId from Ride where id = ?', [rdId], cb);
    },
-
-   function(cnvs, fields, cb) { // Get indicated messages
-      if (vld.check(cnvs.length, Tags.notFound, null, cb)) {
-         if (date) {
-            query = 'select m.id, whenMade, email, content from' +
-             ' Conversation c join Message m on cnvId = c.id' +
-             ' join Person p on prsId = p.id where c.id = ? and' +
-             ' m.whenMade <= ? order by m.whenMade, m.id asc';
-            cnn.chkQry(query, [cnvId, new Date(parseInt(date))], cb);
-         }
-
-         else
-            cnn.chkQry(query, params, cb);
+   function(driverId, fields, cb) {
+      if (vld.check(driverId[0].driverId === req.session.id,
+       Tags.noPermission, null, cb)) {
+         cnn.chkQry('select * from Request where rideId = ?', [rdId], cb);
       }
    },
-
-   function(msgs, fields, cb) { // Return retrieved messages
-      if (num) {
-         var mes = [];
-
-         for (var i = 0; i < num; i++) {
-            mes[i] = msgs[i];
-            if (mes[i].whenMade)
-               mes[i].whenMade = msgs[i].whenMade.getTime();
-         }
-
-         res.json(mes);
-         cb();
-      }
-
-      else {
-         for (var i = 0; i < msgs.length; i++) {
-            if (msgs[i].whenMade)
-               msgs[i].whenMade = msgs[i].whenMade.getTime();
-         }
-         res.json(msgs);
-         cb();
-      }
+   function(rqts, fields, cb) {
+      delete rqts[0]['rideId'];
+      res.json(rqts);
+      cb();
    }],
-
-   function(err){
+   function(err) {
       cnn.release();
    });
 });
 
-router.post('/:cnvId/Msgs', function(req, res){
+//Post rides request
+router.post('/:rdId/Rqts', function(req, res) {
    var vld = req.validator;
    var cnn = req.cnn;
-   var cnvId = req.params.cnvId;
-   var now;
-   var c;
-   var id;
+   var rdId = req.params.rdId;
+   var body = req.body;
+   body.accepted = 0;
 
    async.waterfall([
    function(cb) {
-      cnn.chkQry('select * from Conversation where id = ?', [cnvId], cb);
-   },
-
-   function(cnvs, fields, cb) {
-      if (vld.check(cnvs.length, Tags.notFound, null, cb) &&
-       vld.check(('content' in req.body), Tags.missingField, ['content'], cb) &&
-       vld.check(req.body.content && req.body.content.length <= MSG_LEN,
-       Tags.badValue, ['content'], cb)) {
-         console.log('about to query');
-         cnn.chkQry('insert into Message set ?',
-          {cnvId: cnvId, prsId: req.session.id,
-          whenMade: now = new Date(), content: req.body.content}, cb);
+      if (vld.check(req.session.id, Tags.noLogin, null, cb)) {
+         cnn.chkQry('select role from User where id = ?', req.session.id, cb);
       }
    },
-
-   function(cnv, fields, cb) {
-      id = cnv.insertId;
-      cnn.chkQry('update Conversation set lastMessage = ? where id = ?',
-       [now, cnvId], cb);
+   function(role, fields, cb) {
+      if (vld.check(role[0].role === 0, Tags.noPermission, null, cb)) {
+         cnn.chkQry('select driverId from Ride where id = ?', rdId, cb);
+      }
    },
-
-   function(result, fields, cb) {
-      res.location(router.baseURL + '/' + id).end();
+   function(driverId, fields, cb) {
+      if (vld.hasFields(body, ["email", "firstName", "lastName"], cb) &&
+       vld.chain(body.email != '', Tags.missingField, ["email"])
+       .chain(body.firstName != '', Tags.missingField, ["firstName"])
+       .check(body.lastName != '', Tags.missingField, ["lastName"], cb)) {
+         body.sndId = req.session.id;
+         body.rcvId = driverId[0].driverId;
+         body.rideId = parseInt(rdId);
+         console.log("Body");
+         console.log(body);
+         cnn.chkQry('insert into Request set ?', body, cb);
+      }
+   },
+   function(insRes, fields, cb) {
+      res.location(router.baseURL + '/' + insRes.insertId).end();
       cb();
    }],
-
    function(err) {
       cnn.release();
    });

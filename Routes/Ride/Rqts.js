@@ -94,15 +94,14 @@ router.delete('/:cnvId', function(req, res) {
    });
 });
 
-router.get('/:msgId', function(req, res) {
+router.get('/:rqtId', function(req, res) {
    var vld = req.validator;
-   var msgId = req.params.msgId;
+   var rqtId = req.params.rqtId;
    var cnn = req.cnn;
-   var msg;
 
    async.waterfall([
    function(cb) {  // Check for existence of conversation
-      cnn.chkQry('select * from Message where id = ?', [msgId], cb);
+      cnn.chkQry('select rcvId from Request where id = ?', [rqtId], cb);
    },
 
    function(msgs, fields, cb) { // Get indicated messages
