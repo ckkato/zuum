@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
    var vld = req.validator;
    var body = req.body;
    var cnn = req.cnn;
-   var id = req.query.owner;
+   var id = req.query.driver;
 
    if (!id) {
       cnn.chkQry('select * from Ride', null,
@@ -19,9 +19,11 @@ router.get('/', function(req, res) {
             for (var i = 0; i < rds.length; i++) {
                if (rds[i].lastMessage)
                   rds[i].lastMessage = rds[i].lastMessage.getTime();
+               if (!rds[i].curRiders)
+                  rds[i].curRiders = 0;
             }
 
-            res.json(cnvs);
+            res.json(rds);
          }
          req.cnn.release();
       });
@@ -33,6 +35,8 @@ router.get('/', function(req, res) {
              for (var i = 0; i < rds.length; i++) {
                 if (rds[i].lastMessage)
                    rds[i].lastMessage = rds[i].lastMessage.getTime();
+                if (!rds[i].curRiders)
+                   rds[i].curRiders = 0;
              }
 
              res.json(rds);
@@ -46,7 +50,6 @@ router.post('/', function(req, res) {
    var vld = req.validator;
    var body = req.body;
    var cnn = req.cnn;
-   console.log("here plz");
 
    async.waterfall([
    function(cb) {
