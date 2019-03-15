@@ -96,8 +96,8 @@ router.put('/:rdId', function(req, res) {
    function(rds, fields, cb) {
       if (rds && vld.check(rds.length, Tags.notFound, null, cb)
        && vld.checkPrsOK(rds[0].driverId, cb)) {
-         cnn.chkQry('update Ride set fee = ? where id = ?',
-          [body.fee, rdId], cb);
+         cnn.chkQry('update Ride set ? where id = ?',
+          [body, rdId], cb);
       }
    },
 
