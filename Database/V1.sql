@@ -33,6 +33,10 @@ create table Ride (
 
 create table Request (
    id int auto_increment primary key,
+   email varchar(80) not null,
+   firstName varchar(80) not null,
+   lastName varchar(80) not null,
+   accepted int not null,
    sndId int not null,
    rcvId int not null,
    rideId int not null,

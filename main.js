@@ -64,8 +64,8 @@ app.use(CnnPool.router);
 // Load all subroutes
 app.use('/Usrs', require('./Routes/Account/Usrs.js'));
 app.use('/Ssns', require('./Routes/Account/Ssns.js'));
-app.use('/Cnvs', require('./Routes/Ride/Rds.js'));
-app.use('/Msgs', require('./Routes/Ride/Rqts.js'));
+app.use('/Rds', require('./Routes/Ride/Rds.js'));
+app.use('/Rqts', require('./Routes/Ride/Rqts.js'));
 
 
 app.delete('/DB', function(req, res) {
@@ -112,7 +112,8 @@ app.delete('/DB', function(req, res) {
    }
 });
 
-// Handler of last resort.  Print a stacktrace to console and send a 500 response.
+// Handler of last resort.
+// Print a stacktrace to console and send a 500 response.
 app.use(function(req, res) {
    res.status(NOT_FOUND).end();
    req.cnn.release();

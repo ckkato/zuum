@@ -2,10 +2,9 @@ var Express = require('express');
 var Tags = require('../Validator.js').Tags;
 var router = Express.Router({caseSensitive: true});
 var async = require('async');
-router.baseURL = '/Cnvs';
+router.baseURL = '/Rds';
 const GOOD_STATUS = 200;
 const MSG_LEN = 5000;
-const TITLE_LEN = 80;
 
 router.get('/', function(req, res) {
    var vld = req.validator;
@@ -14,12 +13,12 @@ router.get('/', function(req, res) {
    var id = req.query.owner;
 
    if (!id) {
-      cnn.chkQry('select * from Conversation', null,
-       function(err, cnvs) {
+      cnn.chkQry('select * from Ride', null,
+       function(err, rds) {
          if (!err) {
-            for (var i = 0; i < cnvs.length; i++) {
-               if (cnvs[i].lastMessage)
-                  cnvs[i].lastMessage = cnvs[i].lastMessage.getTime();
+            for (var i = 0; i < rds.length; i++) {
+               if (rds[i].lastMessage)
+                  rds[i].lastMessage = rds[i].lastMessage.getTime();
             }
 
             res.json(cnvs);
@@ -28,15 +27,15 @@ router.get('/', function(req, res) {
       });
 
    } else {
-      cnn.chkQry('select * from Conversation where ownerId = ?', [id],
-       function(err, cnvs) {
+      cnn.chkQry('select * from Ride where driverId = ?', [id],
+       function(err, rds) {
           if (!err) {
-             for (var i = 0; i < cnvs.length; i++) {
-                if (cnvs[i].lastMessage)
-                   cnvs[i].lastMessage = cnvs[i].lastMessage.getTime();
+             for (var i = 0; i < rds.length; i++) {
+                if (rds[i].lastMessage)
+                   rds[i].lastMessage = rds[i].lastMessage.getTime();
              }
 
-             res.json(cnvs);
+             res.json(rds);
           }
           req.cnn.release();
        });
@@ -47,22 +46,27 @@ router.post('/', function(req, res) {
    var vld = req.validator;
    var body = req.body;
    var cnn = req.cnn;
+   console.log("here plz");
 
    async.waterfall([
    function(cb) {
-      if (vld.check(('title' in body) && body.title,
-       Tags.missingField, ['title'], cb)
-       && vld.check(('title' in body) && body.title.length <= TITLE_LEN,
-       Tags.badValue, ['title'], cb))
-         cnn.chkQry('select * from Conversation where title = ?',
-          body.title, cb);
-   },
+      console.log("noooo", body);
+      if (vld.chain(('startDestination' in body) && body.startDestination,
+       Tags.missingField, ['startDestination'])
+       .chain(('endDestination' in body) && body.endDestination,
+       Tags.missingField, ['endDestination'])
+       .chain(('departureTime' in body) && body.departureTime,
+       Tags.missingField, ['departureTime'])
+       .chain(('capacity' in body) && body.capacity, Tags.missingField,
+       ['capacity'])
+       .check(('fee' in body) && body.fee, Tags.missingField, ['fee'], cb)) {
 
-   function(existingCnv, fields, cb) {
-      if (vld.check(!existingCnv.length, Tags.dupTitle, null, cb)) {
-         body.ownerId = req.session.id;
-         cnn.chkQry("insert into Conversation set ?", body, cb);
-      }
+         console.log("time: ", body.departureTime);
+         body.departureTime = new Date(parseInt(body.departureTime));
+         console.log("time: ", body.departureTime);
+         body.driverId = req.session.id;
+         cnn.chkQry('insert into Ride set ?', body, cb);
+       }
    },
 
    function(insRes, fields, cb) {
