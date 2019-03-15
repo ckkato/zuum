@@ -5,6 +5,7 @@ var async = require('async');
 router.baseURL = '/Rds';
 const GOOD_STATUS = 200;
 const MSG_LEN = 5000;
+const DEPARTURE_LIMIT = 21600000;
 
 router.get('/', function(req, res) {
    var vld = req.validator;
@@ -53,20 +54,25 @@ router.post('/', function(req, res) {
 
    async.waterfall([
    function(cb) {
-      console.log("noooo", body);
       if (vld.chain(('startDestination' in body) && body.startDestination,
        Tags.missingField, ['startDestination'])
        .chain(('endDestination' in body) && body.endDestination,
        Tags.missingField, ['endDestination'])
        .chain(('departureTime' in body) && body.departureTime,
        Tags.missingField, ['departureTime'])
+
        .chain(('capacity' in body) && body.capacity, Tags.missingField,
        ['capacity'])
-       .check(('fee' in body) && body.fee, Tags.missingField, ['fee'], cb)) {
+       .check(('fee' in body) && body.fee, Tags.missingField, ['fee'], cb) &&
 
-         console.log("time: ", body.departureTime);
+       vld.check(('departureTime' in body) &&
+       new Date(body.departureTime).getTime()
+       >= new Date().getTime() + DEPARTURE_LIMIT, Tags.badValue,
+       ['departureTime'], cb)) {
+
+         console.log("all good ", new Date(body.departureTime).getTime());
+         console.log("added to ", new Date().getTime() + DEPARTURE_LIMIT);
          body.departureTime = new Date(parseInt(body.departureTime));
-         console.log("time: ", body.departureTime);
          body.driverId = req.session.id;
          cnn.chkQry('insert into Ride set ?', body, cb);
        }
