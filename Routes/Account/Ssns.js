@@ -74,13 +74,12 @@ router.get('/:cookie', function(req, res) {
 
    async.waterfall([
    function(cb) {
-      if (req.session.isAdmin() || vld.chain(!req.session.isAdmin() &&
-       ssnUtil.sessions[cookie], Tags.notFound)
-       .check(!req.session.isAdmin() && cookie ==
+      if (vld.chain(ssnUtil.sessions[cookie], Tags.notFound)
+       .check(cookie ==
        req.cookies[ssnUtil.cookieName], Tags.noPermission, null, cb)) {
 
          var bod = {
-            prsId: req.session.id,
+            usrId: req.session.id,
             cookie: cookie,
             loginTime: ssnUtil.sessions[cookie].loginTime
          };

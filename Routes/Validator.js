@@ -89,9 +89,11 @@ Validator.prototype.checkFields = function(obj, cb) {
 
    Object.keys(obj).forEach(function(name) {
       console.log(name);
-      var valid = (name === 'firstName' ||
+      var valid = (name === 'email' || name === 'phoneNumber' ||
+       name === 'firstName' ||
        name === 'lastName' || name === 'password' ||
-       name === 'oldPassword' || name === 'role')
+       name === 'oldPassword' || name === 'role' || name === 'model' ||
+       name === 'make' || name === 'year');
       if (!valid)
          self.chain(valid, Validator.Tags.forbiddenField, [name]);
 

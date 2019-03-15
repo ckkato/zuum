@@ -1,3 +1,7 @@
+drop database if exists ckkato;
+create database ckkato;
+use ckkato;
+
 
 create table User (
    id int auto_increment primary key,
