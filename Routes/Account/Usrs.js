@@ -105,7 +105,8 @@ router.post('/', function(req, res) {
    function(cb) { // Check properties and search for Email duplicates
       if (body.role !== 1 ? vld.hasFields(body, ["email", "password", "role",
        "firstName", "lastName"], cb) : vld.hasFields(body,
-       ["email", "password", "role", "firstName", "lastName", "make", "model", "year"]) &&
+       ["email", "password", "role", "firstName", "lastName",
+       "make", "model", "year"], cb) &&
        vld.chain(body.email != '', Tags.missingField, ["email"])
        .chain(body.password != '', Tags.missingField, ["password"])
        .chain(body.firstName != '', Tags.missingField, ["firstName"])
