@@ -31,12 +31,14 @@ create table Request (
    id int auto_increment primary key,
    sndId int not null,
    rcvId int not null,
-
+   rideId int not null,
    whenMade datetime not null,
    content varchar(5000) not null,
    constraint FKRequest_sndId foreign key (sndId) references User(id)
     on delete cascade,
    constraint FKRequest_rcvId foreign key (rcvId) references User(id)
+    on delete cascade,
+   constraint FKRequest_rideId foreign key (rideId) references Ride(id)
     on delete cascade
 );
 
