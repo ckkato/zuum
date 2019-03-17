@@ -4,64 +4,40 @@ var router = Express.Router({caseSensitive: true});
 var async = require('async');
 const GOOD_STATUS = 200;
 
-router.baseURL = '/Msgs';
-
-router.get('/', function(req, res) {
-   req.cnn.chkQry(req.validator, 'select id, title from Conversation', null,
-    function(err, cnvs) {
-       if (!err)
-          res.json(cnvs);
-       req.cnn.release();
-    });
-});
-
-router.post('/', function(req, res) {
+router.put('/:rqtId', function(req, res) {
    var vld = req.validator;
    var body = req.body;
+   var rqtId = req.params.rqtId;
+   var curId = req.session.id;
    var cnn = req.cnn;
+   var rideIdent;
+
 
    async.waterfall([
    function(cb) {
-      cnn.chkQry('select * from Conversation where title = ?', body.title, cb);
+      if (vld.check(curId, Tags.noLogin, null, cb))
+         cnn.chkQry('select rcvId, rideId from Request where id = ?',rqtId, cb);
    },
-
-   function(existingCnv, fields, cb) {
-      if (vld.check(!existingCnv.length, Tags.dupTitle, null, cb))
-         cnn.chkQry("insert into Conversation set ?", body, cb);
+   function(rcvId, fields, cb) {
+      if (vld.check(rcvId.length, Tags.notFound, null, cb) &&
+       vld.check(rcvId[0].rcvId === curId, Tags.noPermission, null, cb) &&
+       vld.chain(!('email' in body), Tags.forbiddenField, ['email'])
+       .chain(!('firstName' in body), Tags.forbiddenField, ['firstName'])
+       .chain(!('lastName' in body), Tags.forbiddenField, ['lastName'])
+       .check(body.accepted === 1, Tags.badValue, ['accepted'], cb)) {
+         rideIdent = rcvId[0].rideId;
+         cnn.chkQry('select capacity, curRiders from Ride where id = ?',
+          rcvId[0].rideId, cb);
+      }
    },
-
-   function(insRes, fields, cb) {
-      res.location(router.baseURL + '/' + insRes.insertId).end();
-      cb();
-   }],
-
-   function() {
-      cnn.release();
-   });
-});
-
-router.put('/:cnvId', function(req, res) {
-   var vld = req.validator;
-   var body = req.body;
-   var cnn = req.cnn;
-   var cnvId = req.params.cnvId;
-
-   async.waterfall([
-   function(cb) {
-      cnn.chkQry('select * from Conversation where id = ?', [cnvId], cb);
+   function(result, fields, cb) {
+      if (vld.check(result[0].capacity > result[0].curRiders, Tags.rideFull,
+       null, cb))
+         cnn.chkQry('update Ride set curRiders = curRiders + 1 where id = ?',
+          rideIdent, cb);
    },
-
-   function(cnvs, fields, cb) {
-      if (vld.check(cnvs.length, Tags.notFound, null, cb) &&
-       vld.checkPrsOK(result[0].prsId, cb))
-         cnn.chkQry('select * from Conversation where id <> ? && title = ?',
-          [cnvId, body.title], cb);
-   },
-
-   function(sameTtl, fields, cb) {
-      if (vld.check(!sameTtl.length, Tags.dupTitle, cb))
-         cnn.chkQry("update Conversation set title = ? where id = ?",
-          [body.title, cnvId], cb);
+   function(result, fields, cb) {
+      cnn.chkQry('update Request set accepted = 1 where id = ?', rqtId, cb);
    }],
 
    function(err) {
@@ -71,25 +47,49 @@ router.put('/:cnvId', function(req, res) {
    });
 });
 
-router.delete('/:cnvId', function(req, res) {
+router.delete('/:rqtId', function(req, res) {
    var vld = req.validator;
-   var cnvId = req.params.cnvId;
+   var rqtId = req.params.rqtId;
    var cnn = req.cnn;
+   var curId = req.session.id;
+   var cbFlag = 0;
+   var qry = 'update Ride set curRiders = GREATEST(0, curRiders - 1) ' +
+   'where id = ?';
 
    async.waterfall([
    function(cb) {
-      cnn.chkQry('select * from Conversation where id = ?', [cnvId], cb);
+      if (vld.check(req.session.id, Tags.noLogin, null, cb))
+         cnn.chkQry('select sndId, rcvId from Request where id = ?', rqtId, cb);
    },
 
-   function(cnvs, fields, cb) {
-      if (vld.check(cnvs.length, Tags.notFound, null, cb) &&
-       vld.checkPrsOK(result[0].prsID, cb))
-         cnn.chkQry('delete from Conversation where id = ?', [cnvId], cb);
+   function(idInfo, fields, cb) {
+      if (vld.check(idInfo.length, Tags.notFound, null, cb) &&
+       vld.check(idInfo[0].sndId === curId || idInfo[0].rcvId === curId,
+       Tags.noPermission, null, cb)) {
+         cnn.chkQry('select accepted, rideId from Request where id = ?',
+          rqtId, cb);
+      }
+   },
+   function(vals, fields, cb) {
+      if (vals[0].accepted === 1) {
+         cbFlag = 1;
+         cnn.chkQry(qry, vals[0].rideId, cb);
+      }
+      else {
+         cb();
+      }
+   },
+   //cb1 is if logic goes into else | cb2 is if it performs the qry statement
+   function(cb1, fields, cb2) {
+      if (cbFlag)
+         cnn.chkQry('delete from Request where id = ?', rqtId, cb2);
+      else
+         cnn.chkQry('delete from Request where id = ?', rqtId, cb1);
    }],
 
    function(err) {
       if (!err)
-         cnn.status(GOOD_STATUS);
+         res.status(GOOD_STATUS).end();
       cnn.release();
    });
 });
@@ -98,56 +98,27 @@ router.get('/:rqtId', function(req, res) {
    var vld = req.validator;
    var rqtId = req.params.rqtId;
    var cnn = req.cnn;
+   var qry = "select email, firstName, lastName, accepted " +
+   "from Request where id = ?";
 
    async.waterfall([
    function(cb) {  // Check for existence of conversation
-      cnn.chkQry('select rcvId from Request where id = ?', [rqtId], cb);
+      if (vld.check(req.session.id, Tags.noLogin, null, cb))
+         cnn.chkQry('select rcvId from Request where id = ?', [rqtId], cb);
    },
 
-   function(msgs, fields, cb) { // Get indicated messages
-      if (vld.check(msgs.length, Tags.notFound, null, cb)) {
-         msg = msgs;
-         cnn.chkQry('select email from Person where id = ?',
-          [msg[0].prsId], cb);
-      }
+   function(rcvId, fields, cb) { // Get indicated messages
+      console.log(rcvId.length);
+      if (vld.check(rcvId.length, Tags.notFound, null, cb) &&
+       vld.checkPrsOK(rcvId[0].rcvId, cb))
+         cnn.chkQry(qry, [rqtId], cb);
    },
-
-   function(emails, fields, cb) {
-      msg[0]['email'] = emails[0].email;
-      res.json(msg[0]);
+   function(rqtInfo, fields, cb) {
+      res.json(rqtInfo);
       cb();
    }],
 
    function(err){
-      cnn.release();
-   });
-});
-
-router.post('/:cnvId/Msgs', function(req, res){
-   var vld = req.validator;
-   var cnn = req.cnn;
-   var cnvId = req.params.cnvId;
-   var now;
-
-   async.waterfall([
-   function(cb) {
-      cnn.chkQry('select * from Conversation where id = ?', [cnvId], cb);
-   },
-
-   function(cnvs, fields, cb) {
-      if (vld.check(cnvs.length, Tags.notFound, null, cb))
-         cnn.chkQry('insert into Message set ?',
-          {cnvId: cnvId, prsId: req.session.id,
-          whenMade: now = new Date(), content: req.body.content}, cb);
-   },
-
-   function(insRes, fields, cb) {
-      res.location(router.baseURL + '/' + insRes.insertId).end();
-      cnn.chkQry("update Conversation set lastPost = ? where id = ?",
-       [now, cnvId], cb);
-   }],
-
-   function(err) {
       cnn.release();
    });
 });
