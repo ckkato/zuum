@@ -28,7 +28,8 @@ Validator.Tags = {
    dupTitle: "dupTitle",            // Title duplicates Conversation title
    queryFailed: "queryFailed",
    forbiddenField: "forbiddenField",
-   oldPwdMismatch: "oldPwdMismatch"
+   oldPwdMismatch: "oldPwdMismatch",
+   rideFull: "rideFull"
 };
 
 
