@@ -1,7 +1,6 @@
-drop database if exists jtan26;
-create database jtan26;
-use jtan26;
-
+drop database if exists zuum;
+create database zuum;
+use zuum;
 
 create table User (
    id int auto_increment primary key,
@@ -33,11 +32,13 @@ create table Ride (
 
 create table Request (
    id int auto_increment primary key,
+   email varchar(80) not null,
+   firstName varchar(80) not null,
+   lastName varchar(80) not null,
+   accepted int not null,
    sndId int not null,
    rcvId int not null,
    rideId int not null,
-   whenMade datetime not null,
-   content varchar(5000) not null,
    constraint FKRequest_sndId foreign key (sndId) references User(id)
     on delete cascade,
    constraint FKRequest_rcvId foreign key (rcvId) references User(id)

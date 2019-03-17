@@ -88,22 +88,25 @@ router.post('/', function(req, res) {
    async.waterfall([
 
    function(cb) { // Check properties and search for Email duplicates
-      if (body.role !== 1 ? vld.hasFields(body, ["email", "password", "role",
+      if (vld.check(body.role !== 2, Tags.badValue, ["role"], cb) &&
+       body.role !== 1 ? vld.hasFields(body, ["email", "password", "role",
        "firstName", "lastName"], cb) : vld.hasFields(body,
        ["email", "password", "role", "firstName", "lastName",
        "make", "model", "year"], cb) &&
+
        vld.chain(body.email != '', Tags.missingField, ["email"])
        .chain(body.password != '', Tags.missingField, ["password"])
        .chain(body.firstName != '', Tags.missingField, ["firstName"])
        .chain(body.lastName != '', Tags.missingField, ["lastName"])
        .chain(typeof body.role === 'number', Tags.missingField, ["role"])
+
        .chain(body.role === 1 && body.make && body.make
         != '', Tags.missingField, ["make"])
        .chain(body.role === 1 && body.model && body.model
         != '', Tags.missingField, ["model"])
        .chain(body.role === 1 && body.year && body.year
         != '', Tags.missingField, ["year"])
-       .check(body.role >= 0 && body.role <= 2, Tags.badValue, ["role"], cb)) {
+       .check(body.role >= 0 && body.role <= 1, Tags.badValue, ["role"], cb)) {
 
          cnn.chkQry('select * from User where email = ?', body.email, cb)
       }
