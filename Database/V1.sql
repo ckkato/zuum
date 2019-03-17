@@ -2,7 +2,6 @@ drop database if exists zuum;
 create database zuum;
 use zuum;
 
-
 create table User (
    id int auto_increment primary key,
    firstName varchar(30) not null,
