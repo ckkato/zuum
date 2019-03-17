@@ -1,6 +1,6 @@
-drop database if exists ckkato;
-create database ckkato;
-use ckkato;
+drop database if exists jtan26;
+create database jtan26;
+use jtan26;
 
 
 create table User (

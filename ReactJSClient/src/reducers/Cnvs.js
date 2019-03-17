@@ -5,16 +5,12 @@ export default function Cnvs(state = [], action) {
       case 'UPDATE_CNVS': // Replace previous cnvs
          return action.cnvs;
       case 'UPDATE_CNV':
-         /* Example of wrongness
-        state.forEach(val => {
-           if (val.id == action.data.cnvId)
-              val.title = action.data.title;
-        });
-        return state;*/
          return state.map(val => val.id !== action.data.cnvId ?
             val : Object.assign({}, val, { title: action.data.title }));
       case 'ADD_CNV':
          return state.concat([action.cnv]);
+      case 'DELETE_CNV':
+         return state.filter(val => val.id !== action.id);
       default:
          return state;
    }
