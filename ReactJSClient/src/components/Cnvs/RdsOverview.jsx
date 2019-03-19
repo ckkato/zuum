@@ -25,6 +25,13 @@ export default class RdsOverview extends Component {
        rqstRdTitle: rd.endDestination});
    }
 
+   checkRequests = (rd) => {
+      if (this.props.Usrs.role === 1) {
+         this.props.getDriverRequests(rd);
+         this.props.history.push('/rqsts', rd);
+      }
+   }
+
    // Open a model with a |cnv| (optional)
    openModal = (rd) => {
       const newState = { showModal: true };
@@ -38,7 +45,7 @@ export default class RdsOverview extends Component {
       if (result.status === "Ok") {
          if (this.state.editRd){
             this.modRd(result);
-         }else{
+         } else{
             this.newRd(result);
          }
       }
@@ -114,6 +121,7 @@ export default class RdsOverview extends Component {
                   || this.props.Usrs.role === 1}
                onDelete={() => this.openConfirmation(rd)}
                makeRequest={() => this.openMakeRequest(rd)}
+               checkRequests={() => this.checkRequests(rd)}
                onEdit={() => this.openModal(rd)} />);
       });
 
@@ -171,6 +179,9 @@ const RdItem = function (props) {
                   <Glyphicon glyph="trash" /></Button>
                   <Button bsSize="small" onClick={props.onEdit}>
                   <Glyphicon glyph="edit" /></Button>
+                  {/*JULIAN for merge, we need this here*/}
+                  <Button bsSize="small" onClick={props.checkRequests}>
+                  <Glyphicon glyph="inbox" /></Button>
                </div>
                : ''}
             {props.showRequest ?

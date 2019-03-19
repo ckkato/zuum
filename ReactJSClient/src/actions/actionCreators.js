@@ -68,6 +68,24 @@ export function delRd(rdId, cb){
    };
 }
 
+export function getDriverRequests(rd, cb) {
+   return (dispatch, prevState) => {
+      api.getDrvRequests(rd.id)
+      .then((rqsts) => dispatch({type: 'UPDATE_RQTS', data: rqsts, ride: rd}))
+      .then(() => {if(cb) cb();})
+      .catch(error => dispatch({type: 'GET_REQUESTS_ERR', details: error}));
+   }
+}
+
+export function modAccept(ride, cb) {
+   return (dispatch, prevState) => {
+      api.putAccept(ride)
+      .then((req) => dispatch({type: 'ACCEPT', data: req}))
+      .then(() => {if(cb) cb();})
+      .catch(error => dispatch({type: 'ACCEPT_ERR', details: error}));
+   }
+}
+
 export function addRqst(id, ride, rqst, cb) {
    console.log("RIDE", ride);
    ride.email=rqst.email;
@@ -77,6 +95,34 @@ export function addRqst(id, ride, rqst, cb) {
        request: rs}))
       .then(() => {if(cb) cb(); })
       .catch(error => dispatch({type: 'ADD_REQUEST_ERR', details: error}));
+   };
+}
+
+
+export function updateRequests(id, cb) {
+   return (dispatch, prevState) => {
+      api.getRides(id)
+      .then((ride) => dispatch({ type: 'UPDATE_REQUESTS'}))
+      .then(() => {if (cb) cb();})
+      .catch(error => dispatch({type: 'UPDATE_REQUESTS_ERR', details: error}));
+   }
+}
+
+export function addMsg(cnvId, newMsg, cb){
+   return (dispatch, prevState) => {
+      api.postMsg(cnvId, newMsg)
+      .then(msgRsp => dispatch({type: 'ADD_MSG', msg: msgRsp}))
+      .then(() => {if (cb) cb();})
+      .catch(error => dispatch({type: 'ADD_MSG_ERR', details: error}));
+   };
+}
+
+export function updateMsgs(cnvId, cb) {
+   return (dispatch, prevState) => {
+      api.getMsgs(cnvId)
+      .then((msgs) => dispatch({ type: 'UPDATE_MSGS', msgs}))
+      .then(() => {if (cb) cb();})
+      .catch(error => dispatch({type: 'UPDATE_MSGS_ERR', details: error}));
    };
 }
 
