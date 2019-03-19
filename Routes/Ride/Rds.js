@@ -220,8 +220,14 @@ router.post('/:rdId/Rqts', function(req, res) {
    async.waterfall([
    function(cb) {
       if (vld.check(req.session.id, Tags.noLogin, null, cb)) {
-         cnn.chkQry('select role from User where id = ?', req.session.id, cb);
+         cnn.chkQry('select sndId from Request where rideId = ?', rdId, cb);
       }
+   },
+   function(sndId, fields, cb) {
+      if (vld.check(sndId.filter(pack => pack.sndId === req.session.id)
+       .length === 0, Tags.fullReq, null, cb))
+         cnn.chkQry('select role from User where id = ?', req.session.id, cb);
+
    },
    function(role, fields, cb) {
       if (vld.check(role[0].role === 0, Tags.noPermission, null, cb)) {
