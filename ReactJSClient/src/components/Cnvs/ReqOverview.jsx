@@ -88,8 +88,7 @@ export default class ReqOverview extends Component {
                capacity={r.capacity}
                rideId={r.id}
                onAccept={() => this.modAccept(r)}
-               allow={this.props.Usrs.id === r.driverId}
-               curRiders={r.curRiders}/>);
+               allow={this.props.Usrs.id === r.driverId}/>);
       });
 
       return (
@@ -125,7 +124,6 @@ const RqtItem = function (props) {
          </Row>
          <Row>
             <Col sm={4}>Fee: {props.fee}</Col>
-            <Col sm={4}>Passenger Count: {props.curRiders}</Col>
             <Col sm={4}>Accepted: {props.accepted ? "Yes" : "No"}</Col>
 
          </Row>
