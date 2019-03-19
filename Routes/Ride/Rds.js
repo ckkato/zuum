@@ -100,8 +100,7 @@ router.put('/:rdId', function(req, res) {
    },
 
    function(rds, fields, cb) {
-      if (rds && vld.check(rds.length, Tags.notFound, null, cb)
-       && vld.checkPrsOK(rds[0].driverId, cb)) {
+      if (rds && vld.check(rds.length, Tags.notFound, null, cb)) {
          cnn.chkQry('update Ride set ? where id = ?',
           [body, rdId], cb);
       }
@@ -200,7 +199,6 @@ router.get('/:rdId/Rqts', function(req, res) {
       }
    },
    function(rqts, fields, cb) {
-      delete rqts[0]['rideId'];
       res.json(rqts);
       cb();
    }],
