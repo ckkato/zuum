@@ -109,8 +109,7 @@ router.get('/:rqtId', function(req, res) {
 
    function(rcvId, fields, cb) { // Get indicated messages
       console.log(rcvId.length);
-      if (vld.check(rcvId.length, Tags.notFound, null, cb) &&
-       vld.checkPrsOK(rcvId[0].rcvId, cb))
+      if (vld.check(rcvId.length, Tags.notFound, null, cb))
          cnn.chkQry(qry, [rqtId], cb);
    },
    function(rqtInfo, fields, cb) {
