@@ -27,6 +27,7 @@ export function register(data, cb) {
    };
 }
 
+
 export function updateRds(userId, cb) {
    return (dispatch, prevState) => {
       api.getRd(userId)
@@ -70,7 +71,8 @@ export function addRqst(id, ride, rqst, cb) {
    ride.email=rqst.email;
    return (dispatch, prevState) => {
       api.postRqst(id, rqst)
-      .then((rs) => dispatch({type: 'ADD_REQUEST', data: rqst, ride: ride}))
+      .then((rs) => dispatch({type: 'ADD_REQUEST', data: rqst, ride: ride,
+       request: rs}))
       .then(() => {if(cb) cb(); })
       .catch(error => dispatch({type: 'ADD_REQUEST_ERR', details: error}));
    };

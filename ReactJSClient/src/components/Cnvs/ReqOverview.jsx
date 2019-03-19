@@ -79,6 +79,7 @@ export default class ReqOverview extends Component {
                endDestination={r.endDestination}
                departureTime={r.departureTime}
                fee={r.fee}
+               accepted={r.accepted}
                capacity={r.capacity}
                rideId={r.id}
                curRiders={r.curRiders}/>);
@@ -119,7 +120,8 @@ const RqtItem = function (props) {
             <Col sm={4}>Fee: {props.fee}</Col>
          </Row>
          <Row>
-            <Col sm={4}>Ride Id: {props.rideId}</Col>
+            <Col sm={4}>Rqst Id: {props.rideId}</Col>
+            <Col sm={4}>Accepted: {props.accepted ? "Yes" : "No"}</Col>
          </Row>
       </ListGroupItem>
    )

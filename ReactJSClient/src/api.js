@@ -134,7 +134,13 @@ export function postRd(body) {
 }
 
 export function postRqst(id,body) {
-   return post(`Rds/${id}/Rqts`, body);
+   return post(`Rds/${id}/Rqts`, body).then(rsp => {
+      let location = rsp.headers.get("Location").split('/');
+      console.log("LOCATION: ", location);
+      console.log("id: ", id);
+      return get(`Rqts/${location[location.length-1]}/`);
+   })
+   .then(rsp => rsp.json());
 }
 
 export function getMsgs(cnvId) {
