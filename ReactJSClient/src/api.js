@@ -118,6 +118,7 @@ export function getRd(userId) {
 }
 
 export function putRd(id, body) {
+   console.log(body);
    return put(`Rds/${id}`, body)
 }
 

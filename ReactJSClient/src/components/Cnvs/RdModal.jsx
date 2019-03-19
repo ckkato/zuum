@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-   Modal, Button, FormControl, ControlLabel, FormGroup, HelpBlock
+   Modal, Button, FormControl, ControlLabel, FormGroup, HelpBlock, Col, Row
 } from 'react-bootstrap';
 
 function FieldGroup({id, label, help, ...props }) {
@@ -22,6 +22,11 @@ export default class RdModal extends Component {
          startDestination: "",
          endDestination: "",
          departureTime: "",
+         departureTimeYear: "",
+         departureTimeMonth: "",
+         departureTimeDay: "",
+         departureTimeHour: "",
+         departureTimeMin: "",
          capacity: "",
          fee: ""
       }
@@ -33,7 +38,7 @@ export default class RdModal extends Component {
          status: result,
          startDestination: this.state.startDestination,
          endDestination: this.state.endDestination,
-         departureTime: this.state.departureTime,
+         departureTime: `${this.state.departureTimeYear}-${this.state.departureTimeMonth}-${this.state.departureTimeDay}T${this.state.departureTimeHour}:${this.state.departureTimeMin}:00.000Z`,
          capacity: this.state.capacity,
          fee: this.state.fee
       });
@@ -48,7 +53,7 @@ export default class RdModal extends Component {
 
    handleChange = (e) => {
       let newState = {};
-      console.log(e.target.id);
+      console.log(e.target.value);
       newState[e.target.id] = e.target.value;
       console.log(this.state);
       this.setState(newState);
@@ -56,14 +61,19 @@ export default class RdModal extends Component {
    }
 
    componentWillReceiveProps = (nextProps) => {
-      console.log(nextProps.rd);
+      console.log(nextProps);
       if (nextProps.showModal) {
          this.setState({ startDestination: (nextProps.rd && nextProps.rd.startDestination)
             || "", endDestination: (nextProps.rd && nextProps.rd.endDestination)
-               || "", departureTime: (nextProps.rd && nextProps.rd.departureTime)
-                  || "", capacity: (nextProps.rd && nextProps.rd.capacity)
-                     || "", fee: (nextProps.rd && nextProps.rd.fee)
-                        || "" })
+
+            || "", departureTimeYear: (nextProps.rd && nextProps.rd.departureTimeYear)
+            || "", departureTimeMonth: (nextProps.rd && nextProps.rd.departureTimeMonth)
+            || "", departureTimeDay: (nextProps.rd && nextProps.rd.departureTimeDay)
+            || "", departureTimeHour: (nextProps.rd && nextProps.rd.departureTimeHour)
+            || "", departureTimeMin: (nextProps.rd && nextProps.rd.departureTimeMin)
+            || "", capacity: (nextProps.rd && nextProps.rd.capacity)
+            || "", fee: (nextProps.rd && nextProps.rd.fee)
+            || "" })
       }
       if (nextProps.showConfirmation) {
          this.setState({ rdTitle: (nextProps.rd && nextProps.rd.title)
@@ -72,7 +82,7 @@ export default class RdModal extends Component {
    }
 
    render() {
-      console.log(this.props);
+      console.log(this.state.departureTime);
       return (
          <div>
             <Modal show={this.props.showModal} onHide={() =>
@@ -92,10 +102,37 @@ export default class RdModal extends Component {
                         value={this.state.endDestination}
                         onChange={this.handleChange} required={true}
                         />
-                        <FieldGroup id="departureTime" type="text" label="Departure Time"
+                        {/*<FieldGroup id="departureTime" type="text" label="Departure Time"
                         value={this.state.departureTime}
+                        disabled={this.props.title === "Edit Ride"}
                         onChange={this.handleChange} required={true}
-                        />
+                        />*/}
+                           <FieldGroup id="departureTimeYear" type="text" label="Year"
+                           value={this.state.departureTimeYear}
+                           disabled={this.props.title === "Edit Ride"}
+                           onChange={this.handleChange} required={true}
+                           />
+                           <FieldGroup id="departureTimeMonth" type="text" label="Month"
+                           value={this.state.departureTimeMonth}
+                           disabled={this.props.title === "Edit Ride"}
+                           onChange={this.handleChange} required={true}
+                           />
+                           <FieldGroup id="departureTimeDay" type="text" label="Day"
+                           value={this.state.departureTimeDay}
+                           disabled={this.props.title === "Edit Ride"}
+                           onChange={this.handleChange} required={true}
+                           />
+                           <FieldGroup id="departureTimeHour" type="text" label="Hour"
+                           value={this.state.departureTimeHour}
+                           disabled={this.props.title === "Edit Ride"}
+                           onChange={this.handleChange} required={true}
+                           />
+                           <FieldGroup id="departureTimeMin" type="text" label="Min"
+                           value={this.state.departureTimeMin}
+                           disabled={this.props.title === "Edit Ride"}
+                           onChange={this.handleChange} required={true}
+                           />
+
                         <FieldGroup id="capacity" type="text" label="Capacity"
                         value={this.state.capacity}
                         onChange={this.handleChange} required={true}
@@ -121,8 +158,7 @@ export default class RdModal extends Component {
                   <form onSubmit={(e) =>
                      e.preventDefault() || this.state.rdTitle.length ?
                         this.close("Ok") : this.close("Cancel")}>
-                     Are you sure you want to delete the Conversation
-                     '{this.state.rdTitle}'
+                     Are you sure you want to delete this Ride?
                   </form>
                </Modal.Body>
                <Modal.Footer>
