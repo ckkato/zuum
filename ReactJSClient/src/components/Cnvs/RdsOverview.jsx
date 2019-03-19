@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ListGroup, ListGroupItem, Col, Row, Button, Glyphicon }
          from 'react-bootstrap';
 import RdModal from './RdModal';
+import RqtModal from './RqtModal';
 //import { ConfDialog } from '../index';
 //import { delCnv} from '../../api';
 import './RdsOverview.css';
@@ -14,7 +15,14 @@ export default class RdsOverview extends Component {
       this.state = {
          showModal: false,
          showConfirmation: false,
+         showRequest: false
       }
+   }
+
+   openMakeRequest = (rd) => {
+      console.log("over here", rd.endDestination);
+      this.setState({showRequest: true, rqstRd: rd,
+       rqstRdTitle: rd.endDestination});
    }
 
    // Open a model with a |cnv| (optional)
@@ -34,13 +42,31 @@ export default class RdsOverview extends Component {
             this.newRd(result);
          }
       }
-      this.setState({ showModal: false, editRd: null });
+      this.setState({ showModal: false, editRd: null, showRequest: false });
+   }
+
+   requestDismiss = (result) => {
+      if (result.status === "Ok")
+         this.addRqst(result);
+      this.setState({ showModal: false, editRd: null, showRequest: false });
    }
 
    modRd(result) {
       console.log(result);
       this.props.modRd(this.state.editRd.id, result.startDestination,
          result.endDestination, result.capacity, result.fee);
+   }
+
+   addRqst(result) {
+      this.props.addRqst(
+        this.state.rqstRd.id,
+        this.state.rqstRd,
+        {
+           email: this.props.Usrs.email,
+           firstName: this.props.Usrs.firstName,
+           lastName: this.props.Usrs.lastName
+        });
+
    }
 
    newRd(result) {
@@ -83,9 +109,11 @@ export default class RdsOverview extends Component {
                capacity={rd.capacity}
                curRiders={rd.curRiders}
                fee={rd.fee}
-               showControls={(rd.driverId === this.props.Usrs.id && this.props.Usrs.role === 1)
-                  || this.props.Usrs.role === 2}
+               showRequest={this.props.Usrs.role === 0}
+               showControls={rd.usrId === this.props.Usrs.id
+                  || this.props.Usrs.role === 1}
                onDelete={() => this.openConfirmation(rd)}
+               makeRequest={() => this.openMakeRequest(rd)}
                onEdit={() => this.openModal(rd)} />);
       });
 
@@ -109,6 +137,10 @@ export default class RdsOverview extends Component {
                title={"Delete Conversation"}
                rd={this.state.delRd}
                onDismiss={this.closeConfirmation} />
+            <RqtModal
+               showRequest={this.state.showRequest}
+               title={this.state.rqstRdTitle}
+               onDismiss={this.requestDismiss} />
          </section>
       )
    }
@@ -141,6 +173,18 @@ const RdItem = function (props) {
                   <Glyphicon glyph="edit" /></Button>
                </div>
                : ''}
+            {props.showRequest ?
+               <div className="pull-right">
+                  <Button bsSize="small" onClick={props.makeRequest}>
+                  <Glyphicon glyph="plus" /></Button>
+               </div>
+               : ''
+            }
+
+         </Row>
+         <Row>
+            <Col sm={4}>Capacity: {props.capacity}</Col>
+            <Col sm={4}>Fee: {props.fee}</Col>
          </Row>
       </ListGroupItem>
    )

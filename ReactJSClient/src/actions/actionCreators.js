@@ -27,6 +27,7 @@ export function register(data, cb) {
    };
 }
 
+
 export function updateRds(userId, cb) {
    return (dispatch, prevState) => {
       api.getRd(userId)
@@ -49,6 +50,7 @@ export function addRd(newRds, cb) {
 export function modRd(rdId, start, end, capacity, fee, cb) {
    console.log(fee);
    return (dispatch, prevState) => {
+
       api.putRd(rdId, {startDestination: start, endDestination: end, capacity: capacity, fee: fee})
       .then((rds) => dispatch({type: 'UPDATE_RD', data: {rdId: rdId,
                   startDestination: start, endDestination: end, capacity: capacity, fee: fee}}))
@@ -63,6 +65,18 @@ export function delRd(rdId, cb){
       .then(() => dispatch({type: 'DELETE_RD', id: rdId}))
       .then(() => {if(cb) cb();})
       .catch(error => dispatch({type: 'DELETE_ERR', details: error}));
+   };
+}
+
+export function addRqst(id, ride, rqst, cb) {
+   console.log("RIDE", ride);
+   ride.email=rqst.email;
+   return (dispatch, prevState) => {
+      api.postRqst(id, rqst)
+      .then((rs) => dispatch({type: 'ADD_REQUEST', data: rqst, ride: ride,
+       request: rs}))
+      .then(() => {if(cb) cb(); })
+      .catch(error => dispatch({type: 'ADD_REQUEST_ERR', details: error}));
    };
 }
 

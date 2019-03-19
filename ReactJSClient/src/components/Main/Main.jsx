@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Register, SignIn, RdsOverview, CnvDetail, ConfDialog, Home } from '../index'
+import { Register, SignIn, RdsOverview, CnvDetail,
+  ReqOverview, ConfDialog, Home } from '../index'
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { Alert, Modal, Button, Navbar, Nav, NavItem} from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -53,6 +54,9 @@ class Main extends Component {
                               </LinkContainer>,
                               <LinkContainer key={"my"} to="/myRds">
                                  <NavItem>My Rides</NavItem>
+                              </LinkContainer>,
+                              <LinkContainer key={"req"} to="/rqsts">
+                                 <NavItem>Requests</NavItem>
                               </LinkContainer>
                            ]
                            :
@@ -97,6 +101,8 @@ class Main extends Component {
                 {...this.props}/>
                <ProtectedRoute path='/myRds' component={RdsOverview}
                 userOnly="true" {...this.props}/>}
+               <ProtectedRoute path='/rqsts' component={ReqOverview}
+                userOnly="true" {...this.props}/>
                <ProtectedRoute path='/CnvDetail' component={CnvDetail}
                {...this.props}/>}
                />
