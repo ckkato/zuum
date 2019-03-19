@@ -29,7 +29,8 @@ Validator.Tags = {
    queryFailed: "queryFailed",
    forbiddenField: "forbiddenField",
    oldPwdMismatch: "oldPwdMismatch",
-   rideFull: "rideFull"
+   rideFull: "rideFull",
+   fullReq: "fullRequests"
 };
 
 
