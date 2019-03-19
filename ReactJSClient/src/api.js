@@ -144,6 +144,22 @@ export function postRqst(id,body) {
    .then(rsp => rsp.json());
 }
 
+export function getRides(id) {
+   return get(`Rds/${id}`).then((res) => res.json());
+}
+
+export function putAccept(ride) {
+   ride.accepted = 1;
+   ride.curRiders++;
+   return put(`Rqts/${ride.id}`, {accepted: 1})
+   .then((r) => r.json());
+}
+
+export function getDrvRequests(id) {
+   console.log("in api: ", id);
+   return get(`Rds/${id}/Rqts`).then((res) => res.json());
+}
+
 export function getMsgs(cnvId) {
    return get(`Cnvs/${cnvId}/Msgs`)
    .then((res) => res.json())

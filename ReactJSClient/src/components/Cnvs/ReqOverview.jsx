@@ -40,6 +40,10 @@ export default class ReqOverview extends Component {
       this.props.modRd(this.state.editRd.id, result.title);
    }
 
+   modAccept(ride) {
+      this.props.modAccept(ride);
+   }
+
    newRd(result) {
       console.log("CREATING NEW RIDE: ", result);
       this.props.addRd(
@@ -71,7 +75,8 @@ export default class ReqOverview extends Component {
       var reqItems = [];
       this.props.Rqts.forEach(r => {
          console.log("HELLO", r);
-         if (!this.props.userOnly || this.props.Usrs.email === r.email)
+         if (!this.props.userOnly || this.props.Usrs.email === r.email
+          || this.props.Usrs.id === r.driverId)
             reqItems.push(<RqtItem
                key={r.id}
                driverId={r.driverId}
@@ -82,6 +87,8 @@ export default class ReqOverview extends Component {
                accepted={r.accepted}
                capacity={r.capacity}
                rideId={r.id}
+               onAccept={() => this.modAccept(r)}
+               allow={this.props.Usrs.id === r.driverId}
                curRiders={r.curRiders}/>);
       });
 
@@ -91,20 +98,6 @@ export default class ReqOverview extends Component {
             <ListGroup>
                {reqItems}
             </ListGroup>
-            <Button bsStyle="primary" onClick={() => {this.openModal();}}>
-               New Ride
-            </Button>
-            {/* Modal for creating and change rd */}
-            <RdModal
-               showModal={this.state.showModal}
-               title={this.state.editRd ? "Edit Ride" : "New Ride"}
-               rd={this.state.editRd}
-               onDismiss={this.modalDismiss} />
-            <RdModal
-               showConfirmation={this.state.showConfirmation}
-               title={"Delete Conversation"}
-               rd={this.state.delRd}
-               onDismiss={this.closeConfirmation} />
          </section>
       )
    }
@@ -115,13 +108,26 @@ const RqtItem = function (props) {
    return (
       <ListGroupItem>
          <Row>
-            <Col sm={4}>Driver: {props.driverId}</Col>
-            <Col sm={4}>{props.startDestination} - {props.endDestination}</Col>
-            <Col sm={4}>Fee: {props.fee}</Col>
+            <Col sm={4}>From: {props.startDestination}</Col>
+            <Col sm={4}>To: {props.endDestination}</Col>
+            <Col sm={4}>Departs At: {new Intl.DateTimeFormat('en-Us',
+               {
+                  year: "numeric", month: "short", day: "numeric",
+                  hour: "2-digit", minute: "2-digit", second: "2-digit"
+               })
+               .format(new Date(props.departureTime))}</Col>
+               {props.allow ?
+                  <div className="pull-right">
+                     <Button bsSize="small" onClick={props.onAccept}>
+                     <Glyphicon glyph="ok" /></Button>
+                  </div>
+                  : ''}
          </Row>
          <Row>
-            <Col sm={4}>Rqst Id: {props.rideId}</Col>
+            <Col sm={4}>Fee: {props.fee}</Col>
+            <Col sm={4}>Passenger Count: {props.curRiders}</Col>
             <Col sm={4}>Accepted: {props.accepted ? "Yes" : "No"}</Col>
+
          </Row>
       </ListGroupItem>
    )

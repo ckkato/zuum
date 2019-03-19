@@ -17,6 +17,8 @@ export default function Errs(state = [], action) {
          return action.details;
       case 'DELETE_ERR':
          return action.details;
+      case 'UPDATE_REQUESTS_ERR':
+         return action.details;
       default:
          state = [];
          return state;

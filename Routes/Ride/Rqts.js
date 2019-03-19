@@ -41,6 +41,7 @@ router.put('/:rqtId', function(req, res) {
    }],
 
    function(err) {
+      console.log(err);
       if (!err)
          res.status(GOOD_STATUS).end();
       req.cnn.release();
