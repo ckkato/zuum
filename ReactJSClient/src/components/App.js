@@ -16,7 +16,7 @@ function mapStateToProps(state) {
       Usrs: state.Usrs,
       Rds: state.Rds,
       Errs: state.Errs,
-      Msgs: state.Msgs
+      Rqts: state.Rqts
    };
 }
 
