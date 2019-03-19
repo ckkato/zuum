@@ -80,24 +80,6 @@ export function addRqst(id, ride, rqst, cb) {
    };
 }
 
-export function addMsg(cnvId, newMsg, cb){
-   return (dispatch, prevState) => {
-      api.postMsg(cnvId, newMsg)
-      .then(msgRsp => dispatch({type: 'ADD_MSG', msg: msgRsp}))
-      .then(() => {if (cb) cb();})
-      .catch(error => dispatch({type: 'ADD_MSG_ERR', details: error}));
-   };
-}
-
-export function updateMsgs(cnvId, cb) {
-   return (dispatch, prevState) => {
-      api.getMsgs(cnvId)
-      .then((msgs) => dispatch({ type: 'UPDATE_MSGS', msgs}))
-      .then(() => {if (cb) cb();})
-      .catch(error => dispatch({type: 'UPDATE_MSGS_ERR', details: error}));
-   };
-}
-
 export function updateErrs(cb){
    return (dispatch, prevState) => {
       Promise.resolve(dispatch({type: 'CLEAR_ERRS'}));

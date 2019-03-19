@@ -171,7 +171,8 @@ const errMap = {
         dupTitle: 'Conversation title duplicates an existing one',
         dupEnrollment: 'Duplicate enrollment',
         forbiddenField: 'Field in body not allowed.',
-        queryFailed: 'Query failed (server problem).'
+        queryFailed: 'Query failed (server problem).',
+        rideFull: 'Unable to accept anymore riders since ride is at max capacity.'
     },
     es: {
         missingField: '[ES] Field missing from request: ',

@@ -182,10 +182,6 @@ const RdItem = function (props) {
             }
 
          </Row>
-         <Row>
-            <Col sm={4}>Capacity: {props.capacity}</Col>
-            <Col sm={4}>Fee: {props.fee}</Col>
-         </Row>
       </ListGroupItem>
    )
 }
