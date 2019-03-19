@@ -27,7 +27,7 @@ class Register extends Component {
          email: '',
          password: '',
          passwordTwo: '',
-         role: 0,
+         role: '',
          model: '',
          make: '',
          year: ''
@@ -63,15 +63,24 @@ class Register extends Component {
 
    handleChange(ev) {
       let newState = {};
-
+      console.log(ev.target.id);
       switch (ev.target.type) {
       case 'checkbox':
-         newState[ev.target.id] = ev.target.checked;
+         if(ev.target.id === "role0" && ev.target.checked){
+            newState['role'] = 0;
+         }
+         else if(ev.target.id === "role1" && ev.target.checked){
+            newState['role'] = 1;
+         }
+         else{
+            newState['role'] = '';
+         }
          break;
       default:
          newState[ev.target.id] = ev.target.value;
       }
       this.setState(newState);
+      console.log(newState);
    }
 
    formValid() {
@@ -118,27 +127,30 @@ class Register extends Component {
                help="Repeat your password"
               />
 
-              <FieldGroup id="role" type="text" label="Role"
-               value={this.state.role}
-               placeholder="Enter role"
-               onChange={this.handleChange} required={true}
-               />
 
-                 <FieldGroup disabled={this.state.role !== '1'}
+
+               <Checkbox inline id="role0" value={this.state.role}
+               onChange={this.handleChange} disabled={this.state.role === 1}>
+               Rider</Checkbox>
+               <Checkbox inline id="role1" value={this.state.role}
+               onChange={this.handleChange} disabled={this.state.role === 0}>
+               Driver</Checkbox>
+
+                 <FieldGroup disabled={this.state.role !== 1}
                   id="model" type="text" label="Model"
                   placeholder="Enter Car Model"
                   value={this.state.model}
                   onChange={this.handleChange}
                  />
 
-                 <FieldGroup disabled={this.state.role !== '1'}
+                 <FieldGroup disabled={this.state.role !== 1}
                   id="make" type="text" label="Make"
                   placeholder="Enter Car Make"
                   value={this.state.make}
                   onChange={this.handleChange}
                  />
 
-                 <FieldGroup disabled={this.state.role !== '1'}
+                 <FieldGroup disabled={this.state.role !== 1}
                   id="year" type="text" label="Year"
                   placeholder="Enter Year Of Car"
                   value={this.state.year}

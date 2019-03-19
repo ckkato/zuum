@@ -117,8 +117,8 @@ export default class RdsOverview extends Component {
                curRiders={rd.curRiders}
                fee={rd.fee}
                showRequest={this.props.Usrs.role === 0}
-               showControls={rd.usrId === this.props.Usrs.id
-                  || this.props.Usrs.role === 1}
+               showControls={rd.driverId === this.props.Usrs.id
+                  || this.props.Usrs.role === 2}
                onDelete={() => this.openConfirmation(rd)}
                makeRequest={() => this.openMakeRequest(rd)}
                checkRequests={() => this.checkRequests(rd)}
@@ -142,7 +142,7 @@ export default class RdsOverview extends Component {
                onDismiss={this.modalDismiss} />
             <RdModal
                showConfirmation={this.state.showConfirmation}
-               title={"Delete Conversation"}
+               title={"Delete Ride"}
                rd={this.state.delRd}
                onDismiss={this.closeConfirmation} />
             <RqtModal

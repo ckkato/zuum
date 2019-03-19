@@ -1,11 +1,11 @@
 body, html {
-height: 100%;
-margin: 0;
+   height: 100%;
+   margin: 0;
 }
 .Register {
-background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg");
-height: 800px;
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
+   background-image: url("http://www.pptgrounds.com/wp-content/uploads/2017/11/Autumn-Nature-PPT-Grounds.jpg");
+   height: 800px;
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
 }

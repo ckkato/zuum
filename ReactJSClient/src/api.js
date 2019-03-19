@@ -188,7 +188,8 @@ const errMap = {
         dupEnrollment: 'Duplicate enrollment',
         forbiddenField: 'Field in body not allowed.',
         queryFailed: 'Query failed (server problem).',
-        rideFull: 'Unable to accept anymore riders since ride is at max capacity.'
+        rideFull: 'Unable to accept anymore riders since ride is at max capacity.',
+        fullRequests: 'Already added this request'
     },
     es: {
         missingField: '[ES] Field missing from request: ',
@@ -227,5 +228,6 @@ const errMap = {
  * @param {string} lang
  */
 export function errorTranslate(errTag, lang = 'en') {
+    console.log(errTag);
     return errMap[lang][errTag] || 'Unknown Error!';
 }

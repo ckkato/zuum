@@ -51,10 +51,13 @@ class Home extends Component {
          </section>
 
          <section className={"container"}>
-         <Jumbotron fluid = {false}>
+         <Jumbotron>
          <h1>Welcome To ZUUM</h1>
             <p>
-            Join either as a driver or rider!
+            Join either as a driver or rider! As a driver you are able to start
+            your own rides and accept the requests of ither riders. As a rider
+            you are able to request to join the rides of drivers. With ZUUM you
+            will be able to get to your destination in no time without the hassel!
             </p>
          </Jumbotron>
          </section>

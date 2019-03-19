@@ -107,32 +107,6 @@ export default class RdModal extends Component {
                         disabled={this.props.title === "Edit Ride"}
                         onChange={this.handleChange} required={true}
                         />*/}
-                           <FieldGroup id="departureTimeYear" type="text" label="Year"
-                           value={this.state.departureTimeYear}
-                           disabled={this.props.title === "Edit Ride"}
-                           onChange={this.handleChange} required={true}
-                           />
-                           <FieldGroup id="departureTimeMonth" type="text" label="Month"
-                           value={this.state.departureTimeMonth}
-                           disabled={this.props.title === "Edit Ride"}
-                           onChange={this.handleChange} required={true}
-                           />
-                           <FieldGroup id="departureTimeDay" type="text" label="Day"
-                           value={this.state.departureTimeDay}
-                           disabled={this.props.title === "Edit Ride"}
-                           onChange={this.handleChange} required={true}
-                           />
-                           <FieldGroup id="departureTimeHour" type="text" label="Hour"
-                           value={this.state.departureTimeHour}
-                           disabled={this.props.title === "Edit Ride"}
-                           onChange={this.handleChange} required={true}
-                           />
-                           <FieldGroup id="departureTimeMin" type="text" label="Min"
-                           value={this.state.departureTimeMin}
-                           disabled={this.props.title === "Edit Ride"}
-                           onChange={this.handleChange} required={true}
-                           />
-
                         <FieldGroup id="capacity" type="text" label="Capacity"
                         value={this.state.capacity}
                         onChange={this.handleChange} required={true}
@@ -140,6 +114,36 @@ export default class RdModal extends Component {
                         <FieldGroup id="fee" type="text" label="Fee"
                         value={this.state.fee}
                         onChange={this.handleChange} required={true}
+                        />
+                        <FieldGroup id="departureTimeYear" type="text" label="Year"
+                        value={this.state.departureTimeYear}
+                        disabled={this.props.title === "Edit Ride"}
+                        onChange={this.handleChange} required={true}
+                        placeholder={"ex: 2019"}
+                        />
+                        <FieldGroup id="departureTimeMonth" type="text" label="Month"
+                        value={this.state.departureTimeMonth}
+                        disabled={this.props.title === "Edit Ride"}
+                        onChange={this.handleChange} required={true}
+                        placeholder={"ex: 03"}
+                        />
+                        <FieldGroup id="departureTimeDay" type="text" label="Day"
+                        value={this.state.departureTimeDay}
+                        disabled={this.props.title === "Edit Ride"}
+                        onChange={this.handleChange} required={true}
+                        placeholder={"ex: 14"}
+                        />
+                        <FieldGroup id="departureTimeHour" type="text" label="Hour"
+                        value={this.state.departureTimeHour}
+                        disabled={this.props.title === "Edit Ride"}
+                        onChange={this.handleChange} required={true}
+                        placeholder={"ex: 08"}
+                        />
+                        <FieldGroup id="departureTimeMin" type="text" label="Min"
+                        value={this.state.departureTimeMin}
+                        disabled={this.props.title === "Edit Ride"}
+                        onChange={this.handleChange} required={true}
+                        placeholder={"ex: 30"}
                         />
                   </form>
                </Modal.Body>
