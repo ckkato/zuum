@@ -26,6 +26,7 @@ export default class RdsOverview extends Component {
    }
 
    modalDismiss = (result) => {
+      console.log(result);
       if (result.status === "Ok") {
          if (this.state.editRd){
             this.modRd(result);
@@ -37,16 +38,17 @@ export default class RdsOverview extends Component {
    }
 
    modRd(result) {
-      this.props.modRd(this.state.editRd.id, result.title);
+      console.log(result);
+      this.props.modRd(this.state.editRd.id, result.startDestination,
+         result.endDestination, result.capacity, result.fee);
    }
 
    newRd(result) {
-      console.log("CREATING NEW RIDE: ", result);
       this.props.addRd(
          {
             startDestination: result.startDestination,
             endDestination: result.endDestination,
-            departureTime: result.departureTime,
+            departureTime: new Date(result.departureTime).getTime() + 25200000,
             capacity: parseInt(result.capacity),
             fee: parseInt(result.fee)
          });
@@ -70,7 +72,7 @@ export default class RdsOverview extends Component {
    render() {
       var rdItems = [];
       this.props.Rds.forEach(rd => {
-         console.log("HELLO", rd);
+         console.log("HELLO", rd.departureTime);
          if (!this.props.userOnly || this.props.Usrs.id === rd.driverId)
             rdItems.push(<RdItem
                key={rd.id}
@@ -81,8 +83,8 @@ export default class RdsOverview extends Component {
                capacity={rd.capacity}
                curRiders={rd.curRiders}
                fee={rd.fee}
-               showControls={rd.usrId === this.props.Usrs.id
-                  || this.props.Usrs.role === 1}
+               showControls={(rd.driverId === this.props.Usrs.id && this.props.Usrs.role === 1)
+                  || this.props.Usrs.role === 2}
                onDelete={() => this.openConfirmation(rd)}
                onEdit={() => this.openModal(rd)} />);
       });
@@ -93,7 +95,7 @@ export default class RdsOverview extends Component {
             <ListGroup>
                {rdItems}
             </ListGroup>
-            <Button bsStyle="primary" onClick={() => {this.openModal();}}>
+            <Button bsStyle="primary" onClick={() => {this.openModal();}} disabled={this.props.Usrs.role === 0}>
                New Ride
             </Button>
             {/* Modal for creating and change rd */}
@@ -114,7 +116,6 @@ export default class RdsOverview extends Component {
 
 // A Rd list item
 const RdItem = function (props) {
-   console.log(props.departureTime);
    return (
       <ListGroupItem>
          <Row>
@@ -128,6 +129,10 @@ const RdItem = function (props) {
                   hour: "2-digit", minute: "2-digit", second: "2-digit"
                })
                .format(new Date(props.departureTime)) : 'N/A'}</Col>
+         </Row>
+         <Row>
+            <Col sm={4}>Capacity: {props.capacity}</Col>
+            <Col sm={4}>Fee: {props.fee}</Col>
             {props.showControls ?
                <div className="pull-right">
                   <Button bsSize="small" onClick={props.onDelete}>
@@ -136,11 +141,6 @@ const RdItem = function (props) {
                   <Glyphicon glyph="edit" /></Button>
                </div>
                : ''}
-
-         </Row>
-         <Row>
-            <Col sm={4}>Capacity: {props.capacity}</Col>
-            <Col sm={4}>Fee: {props.fee}</Col>
          </Row>
       </ListGroupItem>
    )

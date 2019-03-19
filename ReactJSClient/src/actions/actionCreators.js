@@ -46,10 +46,12 @@ export function addRd(newRds, cb) {
    };
 }
 
-export function modRd(rdId, title, cb) {
+export function modRd(rdId, start, end, capacity, fee, cb) {
+   console.log(fee);
    return (dispatch, prevState) => {
-      api.putRd(rdId, {title: title})
-      .then((rds) => dispatch({type: 'UPDATE_RD', data: {cnvId: rdId, title: title}}))
+      api.putRd(rdId, {startDestination: start, endDestination: end, capacity: capacity, fee: fee})
+      .then((rds) => dispatch({type: 'UPDATE_RD', data: {rdId: rdId,
+                  startDestination: start, endDestination: end, capacity: capacity, fee: fee}}))
       .then(() => {if (cb) cb();})
       .catch(error => dispatch({type: 'UPDATE_RD_ERR', details: error}));
    };
@@ -58,7 +60,7 @@ export function modRd(rdId, title, cb) {
 export function delRd(rdId, cb){
    return (dispatch, prevState) => {
       api.delRd(rdId)
-      .then(() => dispatch({type: 'DELETE_CNV', id: rdId}))
+      .then(() => dispatch({type: 'DELETE_RD', id: rdId}))
       .then(() => {if(cb) cb();})
       .catch(error => dispatch({type: 'DELETE_ERR', details: error}));
    };

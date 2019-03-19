@@ -10,7 +10,7 @@ var ProtectedRoute = ({component: Cmp, path, ...rest }) => {
    // console.log("HELLOOOOO" + JSON.stringify(rest));
    return (<Route path={path} render={(props) => {
       return Object.keys(rest.Usrs).length !== 0 ?
-      <Cmp {...rest}/> : <Redirect to='/signin'/>;}}/>);
+      <Cmp {...rest}/> : <Redirect to='/home'/>;}}/>);
    };
 
 class Main extends Component {
