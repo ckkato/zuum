@@ -9,15 +9,17 @@ export default function Errs(state = [], action) {
          return action.details;
       case 'REGISTER_ERR':
          return action.details;
-      case 'UPDATE_CNVS_ERR':
+      case 'UPDATE_RDS_ERR':
          return action.details;
-      case 'ADD_CNV_ERR':
+      case 'ADD_RD_ERR':
          return action.details;
-      case 'UPDATE_CNV_ERR':
+      case 'UPDATE_CRD_ERR':
          return action.details;
       case 'DELETE_ERR':
          return action.details;
       case 'UPDATE_REQUESTS_ERR':
+         return action.details;
+      case 'ADD_REQUEST_ERR':
          return action.details;
       default:
          state = [];

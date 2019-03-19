@@ -32,7 +32,7 @@ class Main extends Component {
       return (
          <div>
             <div>
-               <Navbar>
+               <Navbar bsStyle="inverse">
                   <Navbar.Toggle />
                   {this.signedIn() ?
                      <Navbar.Text key={1}>

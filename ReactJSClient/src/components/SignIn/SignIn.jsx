@@ -34,11 +34,11 @@ class SignIn extends Component {
    render() {
       console.log("Rendering Signin");
       return (
-         <section className="container">
+         <section>
          <div className="SignIn">
          <Row>
             <Col>
-               <Col smOffset={0}>
+               <Col smOffset={1}>
                   <h1>Sign in</h1>
                </Col>
                <Form horizontal>
@@ -80,9 +80,6 @@ class SignIn extends Component {
                     </Col>
                   </FormGroup>
                </Form>
-            </Col>
-            <Col smOffset={2} xs={6} md={4}>
-                  <Image src="https://www.ridester.com/wp-content/uploads/2018/09/pasted-image-0-38.png" rounded />
             </Col>
          </Row>
          </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Col, FormControl, Button, ControlLabel, Carousel}
+import { Form, FormGroup, Col, FormControl, Button, ControlLabel, Carousel, Jumbotron}
          from 'react-bootstrap';
 
 
@@ -9,7 +9,8 @@ class Home extends Component {
    render() {
       console.log("Rendering Home");
       return (
-         <section className="container">
+         <section>
+         <section>
             <Carousel>
                <Carousel.Item>
                <img
@@ -47,6 +48,16 @@ class Home extends Component {
                   </Carousel.Caption>
                </Carousel.Item>
             </Carousel>
+         </section>
+
+         <section className={"container"}>
+         <Jumbotron fluid = {false}>
+         <h1>Welcome To ZUUM</h1>
+            <p>
+            Join either as a driver or rider!
+            </p>
+         </Jumbotron>
+         </section>
          </section>
       )
    }

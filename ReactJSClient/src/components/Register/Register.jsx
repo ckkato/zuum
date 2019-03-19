@@ -87,6 +87,7 @@ class Register extends Component {
 
    render() {
      return (
+        <div className="Register">
         <div className="container">
            <form>
               <FieldGroup id="email" type="email" label="Email Address"
@@ -106,6 +107,7 @@ class Register extends Component {
 
               <FieldGroup id="password" type="password" label="Password"
                value={this.state.password}
+               placeholder="Enter Password"
                onChange={this.handleChange} required={true}
                />
 
@@ -118,23 +120,27 @@ class Register extends Component {
 
               <FieldGroup id="role" type="text" label="Role"
                value={this.state.role}
+               placeholder="Enter role"
                onChange={this.handleChange} required={true}
                />
 
                  <FieldGroup disabled={this.state.role !== '1'}
                   id="model" type="text" label="Model"
+                  placeholder="Enter Car Model"
                   value={this.state.model}
                   onChange={this.handleChange}
                  />
 
                  <FieldGroup disabled={this.state.role !== '1'}
                   id="make" type="text" label="Make"
+                  placeholder="Enter Car Make"
                   value={this.state.make}
                   onChange={this.handleChange}
                  />
 
                  <FieldGroup disabled={this.state.role !== '1'}
                   id="year" type="text" label="Year"
+                  placeholder="Enter Year Of Car"
                   value={this.state.year}
                   onChange={this.handleChange}
                  />
@@ -164,6 +170,7 @@ class Register extends Component {
                  }
               }}
            />
+        </div>
         </div>
       )
    }
