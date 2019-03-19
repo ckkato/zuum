@@ -133,6 +133,10 @@ export function postRd(body) {
    .then(rsp => rsp.json());
 }
 
+export function postRqst(id,body) {
+   return post(`Rds/${id}/Rqts`, body);
+}
+
 export function getMsgs(cnvId) {
    return get(`Cnvs/${cnvId}/Msgs`)
    .then((res) => res.json())

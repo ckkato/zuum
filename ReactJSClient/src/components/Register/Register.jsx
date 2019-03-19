@@ -33,6 +33,7 @@ class Register extends Component {
          year: ''
       }
       this.handleChange = this.handleChange.bind(this);
+      this.formValid = this.formValid.bind(this);
    }
 
    submit() {
@@ -120,17 +121,20 @@ class Register extends Component {
                onChange={this.handleChange} required={true}
                />
 
-                 <FieldGroup disabled={this.state.role !== '1'} id="model" type="text" label="Model"
+                 <FieldGroup disabled={this.state.role !== '1'}
+                  id="model" type="text" label="Model"
                   value={this.state.model}
                   onChange={this.handleChange}
                  />
 
-                 <FieldGroup disabled={this.state.role !== '1'} id="make" type="text" label="Make"
+                 <FieldGroup disabled={this.state.role !== '1'}
+                  id="make" type="text" label="Make"
                   value={this.state.make}
                   onChange={this.handleChange}
                  />
 
-                 <FieldGroup disabled={this.state.role !== '1'} id="year" type="text" label="Year"
+                 <FieldGroup disabled={this.state.role !== '1'}
+                  id="year" type="text" label="Year"
                   value={this.state.year}
                   onChange={this.handleChange}
                  />

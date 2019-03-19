@@ -3,8 +3,8 @@ import { combineReducers } from 'redux';
 import Usrs from './Usrs';
 import Rds from './Rds';
 import Errs from './Errs';
-import Msgs from './Msgs';
+import Rqts from './Rqts';
 
-const rootReducer = combineReducers({Usrs, Rds, Errs, Msgs});
+const rootReducer = combineReducers({Usrs, Rds, Errs, Rqts});
 
 export default rootReducer;
