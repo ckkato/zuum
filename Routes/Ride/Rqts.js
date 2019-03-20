@@ -16,7 +16,8 @@ router.put('/:rqtId', function(req, res) {
    async.waterfall([
    function(cb) {
       if (vld.check(curId, Tags.noLogin, null, cb))
-         cnn.chkQry('select rcvId, rideId from Request where id = ?',rqtId, cb);
+         cnn.chkQry('select rcvId, rideId from Request where id = ?',
+         rqtId, cb);
    },
    function(rcvId, fields, cb) {
       if (vld.check(rcvId.length, Tags.notFound, null, cb) &&
@@ -41,7 +42,6 @@ router.put('/:rqtId', function(req, res) {
    }],
 
    function(err) {
-      console.log(err);
       if (!err)
          res.status(GOOD_STATUS).end();
       req.cnn.release();
@@ -60,7 +60,8 @@ router.delete('/:rqtId', function(req, res) {
    async.waterfall([
    function(cb) {
       if (vld.check(req.session.id, Tags.noLogin, null, cb))
-         cnn.chkQry('select sndId, rcvId from Request where id = ?', rqtId, cb);
+         cnn.chkQry('select sndId, rcvId from Request where id = ?',
+         rqtId, cb);
    },
 
    function(idInfo, fields, cb) {
@@ -109,7 +110,6 @@ router.get('/:rqtId', function(req, res) {
    },
 
    function(rcvId, fields, cb) { // Get indicated messages
-      console.log(rcvId.length);
       if (vld.check(rcvId.length, Tags.notFound, null, cb))
          cnn.chkQry(qry, [rqtId], cb);
    },

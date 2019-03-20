@@ -18,14 +18,12 @@ router.get('/', function(req, res) {
    var email = req.query.email;
 
    if (!email){
-     console.log("in no email");
      async.waterfall([
      function(cb) {
          cnn.chkQry('select id, email from User', cb);
      },
 
      function(result, fields, cb) {
-        console.log("result: ", result);
         res.json(result);
         cb();
      }],
@@ -253,7 +251,6 @@ router.delete('/:id', function(req, res) {
    }],
 
    function(err) {
-      console.log('in err');
       cnn.release();
    });
 });

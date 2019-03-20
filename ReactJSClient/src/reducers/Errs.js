@@ -1,7 +1,6 @@
 export default function Errs(state = [], action) {
    console.log("Errs reducing action " + action.type);
 
-   console.log(action);
    switch (action.type) {
       case 'LOGIN_ERR':
          return action.details;
