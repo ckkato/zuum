@@ -3,23 +3,25 @@ export default function Errs(state = [], action) {
 
    switch (action.type) {
       case 'LOGIN_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'LOGOUT_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'REGISTER_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'UPDATE_RDS_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'ADD_RD_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'UPDATE_CRD_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'DELETE_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'UPDATE_REQUESTS_ERR':
-         return action.details;
+         return state.concat(action.details);
       case 'ADD_REQUEST_ERR':
-         return action.details;
+         return state.concat(action.details);
+      case 'CLEAR_ERRS':
+         return state = [];
       default:
          state = [];
          return state;

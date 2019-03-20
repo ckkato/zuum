@@ -22,54 +22,38 @@ const reqConf = {
     credentials: 'include',
 };
 
-function fetchHelper(urlEnd, json){
-   return fetch(urlEnd, json)
-   .catch(() => {throw ["Server Error"]})
-   .then(rsp => {
-      if (rsp.ok){
-         return rsp;
-      } else {
-         errorHelper(rsp.json());
-      }})
-}
-function errorHelper(response){
-   var errs = []
-   response.then(data => data.forEach(
-      function(err){errs.push(errorTranslate(err.tag))}));
-   throw errs;
+function handler(endpoint, method, body) {
+   return fetch(baseURL + endpoint, {
+      method: method,
+      body: (body ? JSON.stringify(body) : undefined),
+      ...reqConf
+   }).catch(err => Promise.reject(["Server Connect Error"]))
+     .then(response => {
+         if (response.ok) {
+            return response;
+         } else
+            return response.json().then(rsp => Object.values(rsp)
+             .map(r => errorTranslate(r.tag))).then(rsp => {throw rsp});
+   });
 }
 
 // Helper functions for the comon request types, automatically
 // adding verb, headers, and error management.
 
 export function post(endpoint, body) {
-    return fetchHelper(baseURL + endpoint, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        ...reqConf
-    });
+    return handler(endpoint, 'POST', body);
 }
 
 export function put(endpoint, body) {
-    return fetchHelper(baseURL + endpoint, {
-        method: 'PUT',
-        body: JSON.stringify(body),
-        ...reqConf
-    });
+    return handler(endpoint, 'PUT', body);
 }
 
 export function get(endpoint) {
-    return fetchHelper(baseURL + endpoint, {
-        method: 'GET',
-        ...reqConf
-    });
+    return handler(endpoint, 'GET');
 }
 
 export function del(endpoint) {
-    return fetchHelper(baseURL + endpoint, {
-        method: 'DELETE',
-        ...reqConf
-    });
+    return handler(endpoint, 'DELETE');
 }
 
 // Functions for performing the api requests

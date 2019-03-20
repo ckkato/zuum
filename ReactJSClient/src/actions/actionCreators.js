@@ -126,6 +126,6 @@ export function updateMsgs(cnvId, cb) {
 
 export function updateErrs(cb){
    return (dispatch, prevState) => {
-      Promise.resolve(dispatch({type: 'CLEAR_ERRS'}));
+      dispatch({ type: 'CLEAR_ERRS'});
    };
 }
