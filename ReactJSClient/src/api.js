@@ -105,7 +105,6 @@ export function signOut() {
  * @returns {Promise resolving to new user}
  */
 export function postUsr(user) {
-   console.log(user);
    return post("Usrs", user)
 }
 
@@ -118,7 +117,6 @@ export function getRd(userId) {
 }
 
 export function putRd(id, body) {
-   console.log(body);
    return put(`Rds/${id}`, body)
 }
 
@@ -137,8 +135,6 @@ export function postRd(body) {
 export function postRqst(id,body) {
    return post(`Rds/${id}/Rqts`, body).then(rsp => {
       let location = rsp.headers.get("Location").split('/');
-      console.log("LOCATION: ", location);
-      console.log("id: ", id);
       return get(`Rqts/${location[location.length-1]}/`);
    })
    .then(rsp => rsp.json());
@@ -156,7 +152,6 @@ export function putAccept(ride) {
 }
 
 export function getDrvRequests(id) {
-   console.log("in api: ", id);
    return get(`Rds/${id}/Rqts`).then((res) => res.json());
 }
 
@@ -188,7 +183,7 @@ const errMap = {
         dupEnrollment: 'Duplicate enrollment',
         forbiddenField: 'Field in body not allowed.',
         queryFailed: 'Query failed (server problem).',
-        rideFull: 'Unable to accept anymore riders since ride is at max capacity.',
+        rideFull: 'Ride is at max capacity.',
         fullRequests: 'Already added this request'
     },
     es: {
@@ -228,6 +223,5 @@ const errMap = {
  * @param {string} lang
  */
 export function errorTranslate(errTag, lang = 'en') {
-    console.log(errTag);
     return errMap[lang][errTag] || 'Unknown Error!';
 }

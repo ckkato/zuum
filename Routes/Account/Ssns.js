@@ -83,7 +83,6 @@ router.get('/:cookie', function(req, res) {
             cookie: cookie,
             loginTime: ssnUtil.sessions[cookie].loginTime
          };
-         console.log(bod);
          res.json(bod);
          cb();
       }

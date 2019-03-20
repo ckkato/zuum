@@ -63,7 +63,6 @@ class Register extends Component {
 
    handleChange(ev) {
       let newState = {};
-      console.log(ev.target.id);
       switch (ev.target.type) {
       case 'checkbox':
          if(ev.target.id === "role0" && ev.target.checked){
@@ -80,16 +79,17 @@ class Register extends Component {
          newState[ev.target.id] = ev.target.value;
       }
       this.setState(newState);
-      console.log(newState);
    }
 
    formValid() {
       let s = this.state;
 
       if(s.role === 0){
-         return s.email && s.lastName && s.password && s.password === s.passwordTwo;
+         return s.email && s.lastName && s.password &&
+         s.password === s.passwordTwo;
       } else {
-         return s.email && s.lastName && s.password && s.password === s.passwordTwo
+         return s.email && s.lastName && s.password &&
+         s.password === s.passwordTwo
        && s.model && s.make && s.year;
       }
    }

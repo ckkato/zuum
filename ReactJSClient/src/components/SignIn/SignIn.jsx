@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Col, FormControl, Button, ControlLabel, Image, Row}
+import { Form, FormGroup, Col, FormControl, Button, ControlLabel, Row}
          from 'react-bootstrap';
 import './SignIn.css';
 

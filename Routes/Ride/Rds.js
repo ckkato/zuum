@@ -69,9 +69,6 @@ router.post('/', function(req, res) {
        new Date(body.departureTime).getTime()
        >= new Date().getTime() + DEPARTURE_LIMIT, Tags.badValue,
        ['departureTime'], cb)) {
-
-         console.log("all good ", new Date(body.departureTime).getTime());
-         console.log("added to ", new Date().getTime() + DEPARTURE_LIMIT);
          body.departureTime = new Date(parseInt(body.departureTime));
          body.driverId = req.session.id;
          cnn.chkQry('insert into Ride set ?', body, cb);
@@ -240,8 +237,6 @@ router.post('/:rdId/Rqts', function(req, res) {
          body.sndId = req.session.id;
          body.rcvId = driverId[0].driverId;
          body.rideId = parseInt(rdId);
-         console.log("Body");
-         console.log(body);
          cnn.chkQry('insert into Request set ?', body, cb);
       }
    },

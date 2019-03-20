@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Col, FormControl, Button, ControlLabel, Carousel, Jumbotron}
+import { Carousel, Jumbotron}
          from 'react-bootstrap';
 
 
 class Home extends Component {
-
-
    render() {
       console.log("Rendering Home");
       return (
@@ -15,36 +13,34 @@ class Home extends Component {
                <Carousel.Item>
                <img
                   className="d-block w-100"
-                  src="https://cdn-images-1.medium.com/max/1600/1*UhLWKnLK28I-J_KOiAowDg.jpeg"
+                  src={"https://cdn-images-1.medium.com/max/"
+                  .concat("1600/1*UhLWKnLK28I-J_KOiAowDg.jpeg")}
                   alt="First slide"
                />
                   <Carousel.Caption>
-                     <h3>First slide label</h3>
-                     <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                     <h3>Welcome To ZUUM</h3>
                   </Carousel.Caption>
                </Carousel.Item>
                <Carousel.Item>
                <img
                   className="d-block w-100"
-                  src="https://www.mmomastermind.com/wp-content/uploads/2018/06/SPI-322-Social_compressed-1.jpg"
+                  src={"https://www.mmomastermind.com/wp-content/"
+                  .concat("uploads/2018/06/SPI-322-Social_compressed-1.jpg")}
                   alt="Third slide"
                />
-
                   <Carousel.Caption>
-                     <h3>Second slide label</h3>
-                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                     <h3>Number One Rideshare App</h3>
                   </Carousel.Caption>
                </Carousel.Item>
                <Carousel.Item>
                <img
                   className="d-block w-100"
-                  src="https://cdn-images-1.medium.com/max/1600/0*oswuEbLtZGi-NZZd.jpg"
+                  src={"https://cdn-images-1.medium.com/"
+                  .concat("max/1600/0*oswuEbLtZGi-NZZd.jpg")}
                   alt="Third slide"
                />
-
                   <Carousel.Caption>
-                     <h3>Third slide label</h3>
-                     <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                     <h3>Easy and Efficient</h3>
                   </Carousel.Caption>
                </Carousel.Item>
             </Carousel>
@@ -57,7 +53,8 @@ class Home extends Component {
             Join either as a driver or rider! As a driver you are able to start
             your own rides and accept the requests of ither riders. As a rider
             you are able to request to join the rides of drivers. With ZUUM you
-            will be able to get to your destination in no time without the hassel!
+            will be able to get to your destination in no time without the
+            hassel!
             </p>
          </Jumbotron>
          </section>

@@ -19,7 +19,6 @@ export function signOut(cb) {
 }
 
 export function register(data, cb) {
-   console.log(data);
    return (dispatch, prevState) => {
       api.postUsr(data)
       .then((usrs) => {if (cb) cb();})
@@ -38,7 +37,6 @@ export function updateRds(userId, cb) {
 }
 
 export function addRd(newRds, cb) {
-   console.log(newRds);
    return (dispatch, prevState) => {
       api.postRd(newRds)
       .then(rdsRsp => dispatch({type: 'ADD_RD', rds: rdsRsp[0]}))
@@ -48,12 +46,13 @@ export function addRd(newRds, cb) {
 }
 
 export function modRd(rdId, start, end, capacity, fee, cb) {
-   console.log(fee);
    return (dispatch, prevState) => {
 
-      api.putRd(rdId, {startDestination: start, endDestination: end, capacity: capacity, fee: fee})
+      api.putRd(rdId, {startDestination: start, endDestination: end,
+          capacity: capacity, fee: fee})
       .then((rds) => dispatch({type: 'UPDATE_RD', data: {rdId: rdId,
-                  startDestination: start, endDestination: end, capacity: capacity, fee: fee}}))
+                  startDestination: start, endDestination: end,
+                  capacity: capacity, fee: fee}}))
       .then(() => {if (cb) cb();})
       .catch(error => dispatch({type: 'UPDATE_RD_ERR', details: error}));
    };
@@ -87,7 +86,6 @@ export function modAccept(ride, cb) {
 }
 
 export function addRqst(id, ride, rqst, cb) {
-   console.log("RIDE", ride);
    ride.email=rqst.email;
    return (dispatch, prevState) => {
       api.postRqst(id, rqst)

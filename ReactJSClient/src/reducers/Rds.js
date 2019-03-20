@@ -4,7 +4,6 @@ export default function Cnvs(state = [], action) {
       case 'UPDATE_RDS': // Replace previous cnvs
          return action.rds;
       case 'UPDATE_RD':
-         console.log(action.data);
          return state.map(val => val.id !== action.data.rdId ?
             val : Object.assign({}, val, {
                startDestination: action.data.startDestination,
@@ -12,10 +11,8 @@ export default function Cnvs(state = [], action) {
                capacity: action.data.capacity,
                fee: action.data.fee}));
       case 'ADD_RD':
-         console.log("DOSPADOSPDOPSA", action.rds);
          return state.concat([action.rds]);
       case 'DELETE_RD':
-         console.log(action);
          return state.filter(val => val.id !== action.id);
       default:
          return state;

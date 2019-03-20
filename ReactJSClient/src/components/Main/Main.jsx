@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Register, SignIn, RdsOverview, CnvDetail,
+import { Register, SignIn, RdsOverview,
   ReqOverview, ConfDialog, Home } from '../index'
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { Alert, Modal, Button, Navbar, Nav, NavItem} from 'react-bootstrap';
@@ -103,12 +103,8 @@ class Main extends Component {
                 userOnly="true" {...this.props}/>}
                <ProtectedRoute path='/rqsts' component={ReqOverview}
                 userOnly="true" {...this.props}/>
-               <ProtectedRoute path='/CnvDetail' component={CnvDetail}
-               {...this.props}/>}
                />
-
             </Switch>
-
             {/*Error popup dialog*/}
             <Modal show={this.props.Errs.length > 0} onHide={this.close}>
                <Modal.Header closeButton>
